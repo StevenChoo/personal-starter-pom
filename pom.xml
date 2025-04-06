@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2025 Steven Choo <info@stevenchoo.nl>
+  ~
+  ~ MIT License. See the LICENSE file in the root directory or <https://opensource.org/license/mit>
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.choo</groupId>
+    <artifactId>personal-starter-pom</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Personal Starter POM</name>
+    <description>Parent POM for Java and Kotlin projects</description>
+
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>releases</id>-->
+<!--            <name>Release repository</name>-->
+<!--            <url>${maven.release.repository.url}</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>snapshots</id>-->
+<!--            <name>Maven repository for snapshots</name>-->
+<!--            <url>${maven.snapshot.repository.url}</url>-->
+<!--        </snapshotRepository>-->
+<!--        <site>-->
+<!--            <name>Port of Rotterdam Hamis Nexus</name>-->
+<!--            <url>${maven.nexus.url}</url>-->
+<!--        </site>-->
+<!--    </distributionManagement>-->
+
+    <modules>
+        <module>java-starter</module>
+        <module>kotlin-starter</module>
+        <module>spring-boot-java-starter</module>
+        <module>spring-boot-kotlin-starter</module>
+    </modules>
+
+    <properties/>
+    <build/>
+
+    <dependencies>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>enable-code-coverage</id>
+            <properties>
+                <jacoco.skip>false</jacoco.skip>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>skip-quality-checks</id>
+            <activation>
+                <property>
+                    <name>quality.skip</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <checkstyle.skip>true</checkstyle.skip>
+                <cpd.skip>true</cpd.skip>
+                <enforcer.skip>true</enforcer.skip>
+                <mdep.analyze.skip>true</mdep.analyze.skip>
+                <pmd.skip>true</pmd.skip>
+                <sort.skip>true</sort.skip>
+                <spotbugs.skip>true</spotbugs.skip>
+                <spotless.check.skip>true</spotless.check.skip>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>format</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>spotless-apply</id>
+                                <goals>
+                                    <goal>apply</goal>
+                                </goals>
+                                <phase>validate</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>
