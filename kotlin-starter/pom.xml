@@ -4,9 +4,7 @@
   ~
   ~ MIT License. See the LICENSE file in the root directory or <http://www.opensource.org/licenses/mit-license.php>
   -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,6 +21,7 @@
 
     <name>Kotlin Starter</name>
     <description>Parent POM for Kotlin projects</description>
+    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <properties>
         <kotlin.version>2.1.20</kotlin.version>
@@ -42,12 +41,16 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
@@ -59,11 +62,8 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-reactor</artifactId> <!-- Needed for reactive http calls -->
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-kotlin</artifactId>
+            <artifactId>kotlinx-coroutines-reactor</artifactId>
+            <!-- Needed for reactive http calls -->
         </dependency>
 
         <dependency>
@@ -75,13 +75,6 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <!-- Specific plugins for Kotlin -->
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
         <pluginManagement>
             <!-- Specific plugins for Kotlin -->
             <plugins>
@@ -89,24 +82,34 @@
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
                     <version>${kotlin.version}</version>
-                    <configuration> <!-- Copied from spring-boot-starter -->
+                    <configuration>
                         <jvmTarget>${java.version}</jvmTarget>
                         <javaParameters>true</javaParameters>
                     </configuration>
-                    <executions> <!-- Copied from spring-boot-starter -->
+                    <executions>
                         <execution>
                             <id>compile</id>
-                            <phase>compile</phase>
                             <goals>
                                 <goal>compile</goal>
                             </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                    <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                </sourceDirs>
+                            </configuration>
                         </execution>
                         <execution>
                             <id>test-compile</id>
-                            <phase>test-compile</phase>
                             <goals>
                                 <goal>test-compile</goal>
                             </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                    <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                                </sourceDirs>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
@@ -127,15 +130,53 @@
                     </configuration>
                 </plugin>
 
-                <!-- Override PMD - Disable for Kotlin since they don`t play well together -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId> <!-- DONE -->
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
                     <configuration>
-                        <skip>true</skip> <!-- TODO check if skip is the correct value -->
+                        <skip>true</skip>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- Specific plugins for Kotlin -->
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
+
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>http://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steven Choo</name>
+            <email>dev@stevenchoo.nl</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/StevenChoo/personal-starter-pom.git</connection>
+        <developerConnection>scm:git:git://github.com/StevenChoo/personal-starter-pom.git</developerConnection>
+        <url>https://github.com/StevenChoo/personal-starter-pom</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/StevenChoo/personal-starter-pom/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>GitHub Actions</system>
+        <url>https://github.com/StevenChoo/personal-starter-pom/actions</url>
+    </ciManagement>
+
 </project>
