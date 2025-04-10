@@ -1,0 +1,92 @@
+name: Maven Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Only trigger on semantic version tags (v1.2.3)
+
+jobs:
+  release:
+    name: Create Release Branch and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Need full history for tags
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        server-id: 'central'
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+        cache: maven
+
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        TAG=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=$TAG" >> $GITHUB_ENV
+        echo "BRANCH_NAME=release/$TAG" >> $GITHUB_ENV
+
+    - name: Validate Semantic Version
+      run: |
+        if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Error: Tag must be a semantic version (vX.Y.Z)"
+          exit 1
+        fi
+
+    - name: Create and checkout release branch
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+        git checkout -b $BRANCH_NAME
+
+    - name: Update versions in POMs
+      run: |
+        # Update versions in order of inheritance
+        mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./java-starter/pom.xml
+        mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./kotlin-starter/pom.xml
+        mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./spring-boot-java-starter/pom.xml
+        mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./spring-boot-kotlin-starter/pom.xml
+
+    - name: Build with strict checks
+      run: |
+        chmod +x ./build.sh
+        ./build.sh
+
+    - name: Commit version changes
+      run: |
+        git add **/pom.xml
+        git commit -m "Release version $VERSION"
+        git push --set-upstream origin $BRANCH_NAME
+
+#    - name: Set up GPG for signing
+#      run: |
+#        echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --import
+#        echo -n "${{ secrets.GPG_PASSPHRASE }}" > $HOME/gpg-passphrase
+#        chmod 600 $HOME/gpg-passphrase
+#
+#    - name: Deploy to Maven Central
+#      env:
+#        MAVEN_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
+#        MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+#        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+#      run: |
+#        chmod +x ./deploy.sh
+#        ./deploy.sh
+
+    - name: Archive logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-logs
+        path: |
+          **/target/deployment-logs/
+          **/status_*.json
+        retention-days: 7

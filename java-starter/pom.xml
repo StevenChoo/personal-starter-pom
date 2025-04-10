@@ -39,8 +39,6 @@
         <strict.dependency-analyze>false</strict.dependency-analyze>
         <skip.spotless>true</skip.spotless>
 
-        <maven-central-publishing-server-id>NONE</maven-central-publishing-server-id>
-
         <!-- Dependency versions in order -->
         <spring-boot.version>3.4.4</spring-boot.version>
         <spring-data.version>2024.1.4</spring-data.version>
@@ -676,7 +674,7 @@
                         <version>${central-publishing-maven-plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <publishingServerId>${maven-central-publishing-server-id}</publishingServerId>
+                            <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
                             <waitUntil>published</waitUntil>
                             <checksums>all</checksums>

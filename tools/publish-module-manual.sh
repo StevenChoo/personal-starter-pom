@@ -27,9 +27,5 @@ echo -e "${YELLOW}Please enter your GPG passphrase:${NC}"
 read -s MAVEN_GPG_PASSPHRASE
 echo ""
 
-echo -e "${YELLOW}Please enter your Maven server id:${NC}"
-read -s MAVEN_SERVER_ID
-echo ""
-
 ## Publishing requested module with given GPG key and passphrase
-MAVEN_SERVER_ID=$MAVEN_SERVER_ID MAVEN_GPG_KEY=$MAVEN_GPG_KEY MAVEN_GPG_PASSPHRASE=$MAVEN_GPG_PASSPHRASE  "$source_dir/publish-module.sh" "$1"
+MAVEN_GPG_KEY=$MAVEN_GPG_KEY MAVEN_GPG_PASSPHRASE=$MAVEN_GPG_PASSPHRASE  "$source_dir/publish-module.sh" "$1"

@@ -31,33 +31,28 @@ if [ ! -d "$module" ]; then
     exit 1
 fi
 
-# If Maven user not provided, prompt for it
-if [ -z "$MAVEN_GPG_KEY" ]; then
-    echo -e "${RED}Error: MAVEN_GPG_KEY environment variable is required${NC}"
-    exit 1
-fi
-
-if [ -z "$MAVEN_GPG_PASSPHRASE" ]; then
-    echo -e "${RED}Error: MAVEN_GPG_PASSPHRASE environment variable is required${NC}"
-    exit 1
-fi
-
-if [ -z "$MAVEN_SERVER_ID" ]; then
-    echo -e "${RED}Error: MAVEN_SERVER_ID environment variable is required${NC}"
-    exit 1
-fi
-
 # Check Maven installation
 if ! command -v mvn &> /dev/null; then
     echo -e "${RED}Error: Maven is not installed or not in PATH${NC}"
     exit 1
 fi
 
-mvn clean deploy -f "./$module/pom.xml" \
+# If Maven user not provided, prompt for it
+if [ -z "$MAVEN_GPG_PASSPHRASE" ]; then
+    echo -e "${RED}Error: MAVEN_GPG_PASSPHRASE environment variable is required${NC}"
+    exit 1
+fi
+
+# If Maven user not provided, prompt for it
+if [ -z "$MAVEN_GPG_KEY" ]; then
+    echo -e "${RED}Error: MAVEN_GPG_KEY environment variable is required${NC}"
+    exit 1
+fi
+
+mvn clean deploy --no-transfer-progress -f "./$module/pom.xml" \
   -Prelease \
   -Dmaven.deploy.skip \
   -DskipTests=true \
   -Dstrict=false \
   -Dgpg.passphrase="$MAVEN_GPG_PASSPHRASE" \
-  -Dgpg.keyname="$MAVEN_GPG_KEY" \
-  -Dmaven-central-publishing-server-id="$MAVEN_SERVER_ID"
+  -Dgpg.keyname="$MAVEN_GPG_KEY"
