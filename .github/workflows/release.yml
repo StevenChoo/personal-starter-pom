@@ -49,16 +49,13 @@ jobs:
 
     - name: Update versions in POMs
       run: |
+        # Build first so the SNAPSHOT versions are available
+        chmod +x ./build.sh && ./build.sh
         # Update versions in order of inheritance
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./java-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./kotlin-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./spring-boot-java-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./spring-boot-kotlin-starter/pom.xml
-
-    - name: Build with strict checks
-      run: |
-        chmod +x ./build.sh
-        ./build.sh
 
     - name: Commit version changes
       run: |
