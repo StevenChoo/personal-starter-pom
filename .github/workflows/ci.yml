@@ -1,0 +1,80 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    name: Build, Test and Publish Snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          server-id: 'central'
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          cache: maven
+
+      - name: Build and test with strict checks
+        run: |
+          chmod +x ./tools/build-and-test.sh
+          ./tools/build-and-test.sh
+
+      - name: Prepare environment for publishing
+        run: |
+          chmod +x ./tools/publish-module.sh
+
+      - name: Release SNAPSHOT version java-starter to maven central
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          ./tools/publish-module.sh java-starter
+
+      - name: Release SNAPSHOT version kotlin-starter to maven central
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          ./tools/publish-module.sh kotlin-starter          
+
+      - name: Release SNAPSHOT version spring-boot-java-starter to maven central
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          ./tools/publish-module.sh spring-boot-java-starter          
+
+      - name: Release SNAPSHOT version spring-boot-kotlin-starter to maven central
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          ./tools/publish-module.sh spring-boot-kotlin-starter
+
+      - name: Archive build results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: |
+            **/target/surefire-reports
+            **/target/site
+          retention-days: 7

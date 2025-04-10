@@ -4,7 +4,8 @@
   ~
   ~ MIT License. See the LICENSE file in the root directory or <http://www.opensource.org/licenses/mit-license.php>
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -20,28 +21,25 @@
 
     <name>Spring Boot Java Starter</name>
     <description>Parent POM for Spring Boot Java projects</description>
-    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <properties>
         <springdoc.version>2.6.0</springdoc.version>
         <spring-boot-maven-plugin.version>${spring-boot.version}</spring-boot-maven-plugin.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot starters are already managed by import Spring Dependencies in parent-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-common</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <!-- Default dependencies - Exclude in project if needed -->
     <dependencies>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-common</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -50,7 +48,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -90,8 +87,26 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Add additional ignore rules for Spring Boot -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <ignoredUsedUndeclaredDependencies>
+                        <ignoredUsedUndeclaredDependency>org.springframework.boot:*</ignoredUsedUndeclaredDependency>
+                        <ignoredUsedUndeclaredDependency>org.springframework:spring*</ignoredUsedUndeclaredDependency>
+                    </ignoredUsedUndeclaredDependencies>
+                    <ignoredUnusedDeclaredDependencies combine.children="append">
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-logging*</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-web*</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.springframework.boot:spring-boot-starter-test*</ignoredUnusedDeclaredDependency>
+                    </ignoredUnusedDeclaredDependencies>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <licenses>
         <license>
