@@ -50,7 +50,8 @@ jobs:
     - name: Update versions in POMs
       run: |
         # Build first so the SNAPSHOT versions are available
-        chmod +x ./build.sh && ./build.sh
+        chmod +x ./tools/build.sh && ./tools/build.sh
+        
         # Update versions in order of inheritance
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./java-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./kotlin-starter/pom.xml
