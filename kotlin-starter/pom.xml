@@ -4,8 +4,7 @@
   ~
   ~ MIT License. See the LICENSE file in the root directory or <http://www.opensource.org/licenses/mit-license.php>
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -21,10 +20,10 @@
 
     <name>Kotlin Starter</name>
     <description>Parent POM for Kotlin projects</description>
-    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <properties>
         <kotlin.version>2.1.20</kotlin.version>
+        <jetbrains-annotations.version>26.0.2</jetbrains-annotations.version>
         <mockk.version>1.13.14</mockk.version>
     </properties>
 
@@ -35,7 +34,7 @@
                 <artifactId>kotlin-bom</artifactId>
                 <version>${kotlin.version}</version>
                 <type>pom</type>
-                <scope>runtime</scope>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -43,6 +42,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <!-- Used by Kotlin -->
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -61,9 +66,9 @@
             <artifactId>kotlinx-coroutines-core-jvm</artifactId>
         </dependency>
         <dependency>
+            <!-- Needed for reactive http calls -->
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-reactor</artifactId>
-            <!-- Needed for reactive http calls -->
         </dependency>
 
         <dependency>
@@ -137,6 +142,7 @@
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -145,8 +151,22 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Add additional ignore rules for Kotlin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <ignoredUnusedDeclaredDependencies combine.children="append">
+                        <ignoredUnusedDeclaredDependency>org.jetbrains.kotlin*</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>io.mockk:*</ignoredUnusedDeclaredDependency>
+                    </ignoredUnusedDeclaredDependencies>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
+    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <licenses>
         <license>

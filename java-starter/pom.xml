@@ -14,7 +14,6 @@
 
     <name>Java Starter</name>
     <description>Parent POM for Java projects</description>
-    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <properties>
         <!-- Project configuration -->
@@ -39,6 +38,8 @@
         <strict.sort>WARN</strict.sort>
         <strict.dependency-analyze>false</strict.dependency-analyze>
         <skip.spotless>true</skip.spotless>
+
+        <maven-central-publishing-server-id>NONE</maven-central-publishing-server-id>
 
         <!-- Dependency versions in order -->
         <spring-boot.version>3.4.4</spring-boot.version>
@@ -80,6 +81,9 @@
         <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
 
+        <!-- Maven release plugin versions -->
+        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
+        <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -118,6 +122,10 @@
     <!-- Default dependencies - Exclude in project if needed -->
     <dependencies>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
             <!-- We almost always will use JSON serialization / deserialization -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -129,6 +137,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -450,6 +459,12 @@
                     <version>${maven-dependency-plugin.version}</version>
                     <configuration>
                         <failOnWarning>${strict.dependency-analyze}</failOnWarning>
+                        <ignoredUnusedDeclaredDependencies>
+                            <ignoredUnusedDeclaredDependency>com.fasterxml.jackson.core*</ignoredUnusedDeclaredDependency>
+                            <ignoredUnusedDeclaredDependency>com.fasterxml.jackson.datatype*</ignoredUnusedDeclaredDependency>
+                            <ignoredUnusedDeclaredDependency>org.projectlombok:lombok</ignoredUnusedDeclaredDependency>
+                            <ignoredUnusedDeclaredDependency>org.assertj:*</ignoredUnusedDeclaredDependency>
+                        </ignoredUnusedDeclaredDependencies>
                     </configuration>
                     <executions>
                         <execution>
@@ -520,6 +535,7 @@
             </plugin>
         </plugins>
     </build>
+    <url>https://github.com/StevenChoo/personal-starter-pom</url>
 
     <licenses>
         <license>
@@ -599,6 +615,9 @@
 
         <profile>
             <id>format</id>
+            <properties>
+                <skip.spotless>false</skip.spotless>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -614,9 +633,57 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>com.github.ekryd.sortpom</groupId>
+                        <artifactId>sortpom-maven-plugin</artifactId>
+                        <configuration>
+                            <verifyFail>sort</verifyFail>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sortpom-sort</id>
+                                <goals>
+                                    <goal>sort</goal>
+                                </goals>
+                                <phase>validate</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>verify</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central-publishing-maven-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>${maven-central-publishing-server-id}</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                            <checksums>all</checksums>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
 </project>
