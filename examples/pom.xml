@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright (C) 2025 Steven Choo <info@stevenchoo.nl>
+  ~
+  ~ MIT License. See the LICENSE file in the root directory or <http://www.opensource.org/licenses/mit-license.php>
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.choo.webscraper</groupId>
+    <artifactId>test-personal-starter-pom</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>test-personal-starter-pom</name>
+
+    <modules>
+        <module>java-starter-test</module>
+        <module>kotlin-starter-test</module>
+        <module>spring-boot-java-starter-test</module>
+        <module>spring-boot-kotlin-starter-test</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+</project>
