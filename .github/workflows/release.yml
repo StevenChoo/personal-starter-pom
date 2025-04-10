@@ -50,6 +50,9 @@ jobs:
     - name: Update versions in POMs
       run: |
         # Update versions in order of inheritance
+        chmod +x ./build.sh
+        ./build.sh
+
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./java-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./kotlin-starter/pom.xml
         mvn versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false -f ./spring-boot-java-starter/pom.xml
@@ -57,7 +60,6 @@ jobs:
 
     - name: Build with strict checks
       run: |
-        chmod +x ./build.sh
         ./build.sh
 
     - name: Commit version changes
