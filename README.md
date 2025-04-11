@@ -133,7 +133,6 @@ The project includes scripts for publishing modules to Maven Central:
 # Set required environment variables
 export MAVEN_GPG_KEY="your-gpg-key-id"
 export MAVEN_GPG_PASSPHRASE="your-gpg-passphrase"
-export MAVEN_SERVER_ID="the-id-of-the-configured-server"
 
 # Publish a module (e.g., java-starter)
 ./tools/publish-module.sh java-starter
