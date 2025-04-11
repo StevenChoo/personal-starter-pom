@@ -49,7 +49,7 @@ if [ -z "$MAVEN_GPG_KEY" ]; then
     exit 1
 fi
 
-mvn clean deploy --no-transfer-progress -f "./$module/pom.xml" \
+mvn --batch-mode --no-transfer-progress clean deploy -f "./$module/pom.xml" \
   -Prelease \
   -Dmaven.deploy.skip \
   -DskipTests=true \

@@ -17,5 +17,5 @@ source "$source_dir/build.sh"
 
 ## Building example projects
 cd "$source_dir/.." || exit 1
-mvn clean install --no-transfer-progress -U -Dstrict=true -f ./examples/pom.xml
+mvn --batch-mode --no-transfer-progress clean install -U -Dstrict=true -f ./examples/pom.xml
 
