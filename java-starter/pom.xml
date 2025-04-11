@@ -65,7 +65,8 @@
         <extra-enforcer-rules.version>1.9.0</extra-enforcer-rules.version>
 
         <maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
-        <pmd.version>7.2.0</pmd.version>
+        <pmd.version>7.12.0</pmd.version>
+        <pmd-compat6.version>7.2.0</pmd-compat6.version>
 
         <spotbugs-maven-plugin.version>4.9.3.0</spotbugs-maven-plugin.version>
         <spotbugs.version>4.9.3</spotbugs.version>
@@ -327,7 +328,7 @@
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-compat6</artifactId>
-                            <version>${pmd.version}</version>
+                            <version>${pmd-compat6.version}</version>
                         </dependency>
 
                         <dependency>
