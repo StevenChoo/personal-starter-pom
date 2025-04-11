@@ -14,7 +14,7 @@ source_dir=$(dirname "${source}")
 
 cd "$source_dir/.." || exit 1
 
-mvn clean install -f ./java-starter/pom.xml -Dstrict=true
-mvn clean install -f ./kotlin-starter/pom.xml -Dstrict=true
-mvn clean install -f ./spring-boot-java-starter/pom.xml -Dstrict=true
-mvn clean install -f ./spring-boot-kotlin-starter/pom.xml -Dstrict=true
+mvn --batch-mode --no-transfer-progress clean install -f ./java-starter/pom.xml -Dstrict=true
+mvn --batch-mode --no-transfer-progress clean install -f ./kotlin-starter/pom.xml -Dstrict=true
+mvn --batch-mode --no-transfer-progress clean install -f ./spring-boot-java-starter/pom.xml -Dstrict=true
+mvn --batch-mode --no-transfer-progress clean install -f ./spring-boot-kotlin-starter/pom.xml -Dstrict=true
