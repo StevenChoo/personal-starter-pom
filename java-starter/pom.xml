@@ -40,10 +40,11 @@
         <skip.spotless>true</skip.spotless>
 
         <!-- Dependency versions in order -->
-        <spring-boot.version>3.4.4</spring-boot.version>
-        <spring-data.version>2024.1.4</spring-data.version>
-        <jackson.version>2.18.3</jackson.version>
-        <junit.version>5.12.1</junit.version>
+        <spring-boot.version>3.4.5</spring-boot.version>
+        <spring-data.version>2024.1.5</spring-data.version>
+        <jackson.version>2.19.0</jackson.version>
+        <junit.version>5.12.2</junit.version>
+        <assertj.version>3.27.3</assertj.version>
 
         <!-- Maven dependencies in order -->
         <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
@@ -57,15 +58,15 @@
         <!-- Maven QA plugin versions -->
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <!--    Used by maven surefire-->
-        <asm.version>9.7.1</asm.version>
+        <asm.version>9.8</asm.version>
 
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
 
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
-        <extra-enforcer-rules.version>1.9.0</extra-enforcer-rules.version>
+        <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 
         <maven-pmd-plugin.version>3.26.0</maven-pmd-plugin.version>
-        <pmd.version>7.12.0</pmd.version>
+        <pmd.version>7.13.0</pmd.version>
         <pmd-compat6.version>7.2.0</pmd-compat6.version>
 
         <spotbugs-maven-plugin.version>4.9.3.0</spotbugs-maven-plugin.version>
@@ -115,6 +116,15 @@
                 <type>pom</type>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-bom</artifactId>
+                <version>${assertj.version}</version>
+                <type>pom</type>
+                <scope>test</scope>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
